@@ -1,13 +1,11 @@
-import { UserController } from '../controller/user-controller';
 import { BaseRouter } from '../../../utils/base-router';
+import { UtilsController } from '../controller/utils-controller';
 
-export class UserRoutes extends BaseRouter {
+export class UtilsRoutes extends BaseRouter {
 
-  public static path = '/api/user';
+  public static path = '/api';
 
   configRoute() {
-    const controller: UserController = new UserController();
-
     /**
      * @swagger
      * /api/user:
@@ -33,6 +31,12 @@ export class UserRoutes extends BaseRouter {
      *     security:
      *       - Bearer: []
      */
-    this._router.get('/', controller.getUsers);
+    this._router.get('/file/:board?/:type?/:fileName?', UtilsController.getFile);
+
+    this._router.get('/statistics', UtilsController.getStatistics);
+
+    this._router.get('/randomimages', UtilsController.getRandomImage);
+
+    this._router.get('/icons/:key', UtilsController.getIcon);
   }
 }
