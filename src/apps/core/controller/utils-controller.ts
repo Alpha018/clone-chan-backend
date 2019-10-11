@@ -6,6 +6,10 @@ import { File, IFile } from '../../model/file';
 import { Thread } from '../../model/thread';
 import { Connection } from '../../model/connection';
 import moment from 'moment';
+import { MongoManager } from '../manager/mongo-manager';
+
+const imageThumbnail = require('image-thumbnail');
+const strs = require('stringstream');
 
 export class UtilsController {
   static async getIcon(req: Request, res: Response, next: NextFunction) {
@@ -70,8 +74,7 @@ export class UtilsController {
 
       res.header('Content-Disposition', `inline; filename="${fileMongo.nameFileOriginal}"`);
       res.header('Content-type', fileMongo.mimeType);
-      result
-        .pipe(res);
+      result.pipe(res);
     } catch (e) {
       logger.error(`${logPrefix} Error: ${e.message}`);
       next(new errors.NOT_FOUND({ error: e.message }));
@@ -100,6 +103,34 @@ export class UtilsController {
       logger.error(`${logPrefix} Error: ${e.message}`);
       next(new errors.NOT_FOUND({ error: e.message }));
       return;
+    }
+  }
+
+  static async getThreadOrCommentById(req: Request, res: Response, next: NextFunction) {
+    const logPrefix = buildPrefix(req.method, req.path);
+
+    const { id } = req.query;
+
+    if (!id) {
+      logger.error(`${logPrefix} Some param not found in request`);
+      next(new errors.BAD_REQUEST());
+      return;
+    }
+
+    try {
+      const objectIndex = await MongoManager.getCommentThread(id);
+
+      if (!objectIndex) {
+        logger.error(`${logPrefix} Index not found in database`);
+        next(new errors.NOT_FOUND({ type: 'file' }));
+        return;
+      }
+
+      const thread = await MongoManager.getIdCommentThread(objectIndex);
+
+      res.status(200).send(thread);
+    } catch (e) {
+      next(e);
     }
   }
 

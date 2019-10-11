@@ -4,6 +4,7 @@ import path from 'path';
 import { IThread, Thread } from '../../model/thread';
 import { Utils } from '../../../utils/utils';
 import { IObjectIndex, ObjectIndex } from '../../model/objectIndex';
+import { errors } from '../../../utils/errors';
 
 const logParentPrefix = path.basename(__filename, '.js');
 
@@ -74,6 +75,55 @@ export class MongoManager {
       threadComment.commentId = index.objectId;
     }
     return threadComment;
+  }
+
+  public static async getCommentThread(id: string) {
+    const logPrefix = buildPrefix(logParentPrefix, this.getCommentThread.name);
+
+    const objectIndex = await ObjectIndex.findOne({ objectId: id });
+
+    if (!objectIndex) {
+      logger.error(`${logPrefix} Error in put id in thread or comment`);
+      throw new errors.NOT_FOUND({ id, error: 'Thread not found' });
+    }
+
+    if (objectIndex.type === 'thread') {
+      return await this.getThreadWithComments(objectIndex.objectReference);
+    }  if (objectIndex.type === 'comment') {
+      const comment = await Comment.findOne({ _id: objectIndex.objectReference });
+      // @ts-ignore
+      return await this.getThreadWithComments(comment.threadId);
+    }
+  }
+
+  public static async getThreadWithComments(id: string) {
+    const thread = await Thread.findOne({ _id: id })
+      .select('-deleted -updatedAt -__v')
+      .populate([{
+        path: 'boardId',
+        select: '-deleted -updatedAt -__v -created_at',
+      }, {
+        path: 'file',
+        select: '_id type nameFile fileId key nameFileOriginal type mimeType size dimension',
+      }, {
+        path: 'userInformation',
+        select: 'country countryCode',
+      }]);
+    const threadObject = thread.toObject();
+    threadObject.comments = await Comment.find({ threadId: thread._id })
+      .select('_id option comment commentId created_at')
+      .populate({
+        path: 'file',
+        select: '_id type nameFile fileId key nameFileOriginal type mimeType size dimension',
+      });
+    threadObject.countComment = threadObject.comments.length;
+    threadObject.countImage = Utils.countType(threadObject.comments, 'image');
+    threadObject.countVideo = Utils.countType(threadObject.comments, 'video');
+    for (let j = 0; j < threadObject.comments.length; j = j + 1) {
+      threadObject.comments[j] = threadObject.comments[j].toObject();
+      threadObject.comments[j] = await MongoManager.getIdCommentThread(threadObject.comments[j]);
+    }
+    return threadObject;
   }
 
   public static async getCommentsByOne(threadObject: IThread) {

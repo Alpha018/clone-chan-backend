@@ -10,7 +10,6 @@ import { Utils } from '../../../utils/utils';
 import { MongoManager } from '../manager/mongo-manager';
 import { Comment } from '../../model/comment';
 import { ObjectIndex } from '../../model/objectIndex';
-import { ancestorWhere } from 'tslint';
 
 export class ThreadController {
   static async getThreads(req: Request, res: Response, next: NextFunction) {
@@ -76,7 +75,14 @@ export class ThreadController {
       .sort({ created_at: -1 })
       .limit(20);
 
-      res.status(200).send({ threads });
+      const send = [];
+      for (const thread of threads) {
+        const aux = thread.toObject();
+        await MongoManager.getIdCommentThread(aux);
+        send.push(aux);
+      }
+
+      res.status(200).send({ threads: send });
     } catch (e) {
       logger.error(`${logPrefix} Error: ${e.message}`);
       next(new errors.NOT_FOUND({ error: e.message }));

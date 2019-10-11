@@ -38,5 +38,7 @@ export class UtilsRoutes extends BaseRouter {
     this._router.get('/randomimages', UtilsController.getRandomImage);
 
     this._router.get('/icons/:key', UtilsController.getIcon);
+
+    this._router.get('/threadById', UtilsController.getThreadOrCommentById);
   }
 }
