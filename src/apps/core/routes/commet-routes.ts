@@ -1,13 +1,11 @@
-import { UserController } from '../controller/user-controller';
 import { BaseRouter } from '../../../utils/base-router';
+import { CommentController } from '../controller/commet-controller';
 
-export class UserRoutes extends BaseRouter {
+export class CommentRoutes extends BaseRouter {
 
-  public static path = '/api/user';
+  public static path = '/api';
 
   configRoute() {
-    const controller: UserController = new UserController();
-
     /**
      * @swagger
      * /api/user:
@@ -33,6 +31,7 @@ export class UserRoutes extends BaseRouter {
      *     security:
      *       - Bearer: []
      */
-    this._router.get('/', controller.getUsers);
+    this._router.put('/comment', CommentController.createNewComment);
+    this._router.get('/comment', CommentController.getComments);
   }
 }

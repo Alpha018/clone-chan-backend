@@ -22,6 +22,15 @@ const errorClasses = {};
       `Can't found ${meta.type || 'resource'} with id ${meta.id}`,
   },
   {
+    status: 413,
+    name: 'PAYLOAD_TOO_LARGE',
+    description: 'The payload Too Large',
+  }, {
+    status: 415,
+    name: 'UNSUPPORTED_MEDIA_TYPE',
+    description: 'Unsupported Media Type',
+  },
+  {
     status: 460,
     name: 'INTERNAL_ERROR',
     description: (meta: { message: string; } | undefined) =>
@@ -31,6 +40,21 @@ const errorClasses = {};
     status: 500,
     name: 'UNEXPECTED_ERROR',
     description: 'Unexpected error',
+  },
+  {
+    status: 503,
+    name: 'SERVICE_UNAVAILABLE',
+    description: 'Service Unavailable',
+  },
+  {
+    status: 500,
+    name: 'EXIST_FILE',
+    description: 'File exist in DB',
+  },
+  {
+    status: 500,
+    name: 'FILE_ERROR',
+    description: 'Error in file',
   },
 ].forEach((error) => {
   // @ts-ignore
