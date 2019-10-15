@@ -16,10 +16,10 @@ export class SpaceManager {
 
     const existFile = await File.findOne({ md5: file.md5 });
 
-    /*if (existFile) {
+    if (existFile) {
       logger.error(`${logPrefix} Error file exist in DB`);
       throw new errors.EXIST_FILE();
-    }*/
+    }
 
     const fileName = Utils.generateRandomFileName(file);
 
