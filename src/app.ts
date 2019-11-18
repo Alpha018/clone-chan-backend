@@ -50,7 +50,7 @@ class Server {
         extended: true,
       },
     ));
-    // this.app.use(checkIpInformation);
+    this.app.use(checkIpInformation);
     this.app.use(new expressBrute(Utils.getStoreBruteForce(), {
       freeRetries: 10000,
       attachResetToRequest: false,
