@@ -63,7 +63,7 @@ pipeline {
                     string(name: 'SPACE_SECRET_KEY', description: '')
                     string(name: 'SPACE_BUCKET', description: '')
 
-                    string(name: 'MONGO_HOST', defaultValue: 'ucn-chan-mongo', description: '')
+                    string(name: 'MONGO_HOST', defaultValue: 'ucn-chan-mongo-prod', description: '')
                     string(name: 'MONGO_PORT', defaultValue: '27017', description: '')
                     string(name: 'MONGO_DATABASE', defaultValue: 'clonechan', description: '')
                 }
