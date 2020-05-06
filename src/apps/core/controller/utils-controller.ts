@@ -17,7 +17,6 @@ export class UtilsController {
 
     const { key } = req.params;
 
-    console.log(key);
     if (!key) {
       logger.error(`${logPrefix} Some param not found in request`);
       next(new errors.BAD_REQUEST());
@@ -25,7 +24,6 @@ export class UtilsController {
     }
 
     try {
-      console.log(`/icons/${key}`);
       const result = await SpaceManager.getFile(`icons/${key}`);
 
       res.header('Content-Disposition', `inline; filename="${key}"`);
@@ -143,7 +141,7 @@ export class UtilsController {
       const images = await File.find({ type: 'image' })
         .select('_id nameFile key')
         .skip(randomLimit)
-        .limit(5);
+        .limit(3);
 
       res.status(200).send({ images });
     } catch (e) {
