@@ -51,14 +51,6 @@ class Server {
       },
     ));
     this.app.use(checkIpInformation);
-    this.app.use(new expressBrute(Utils.getStoreBruteForce(), {
-      freeRetries: 1000000,
-      attachResetToRequest: false,
-      refreshTimeoutOnRequest: false,
-      minWait: 5 * 60 * 1000, // 5 minutes
-      maxWait: 25 * 60 * 60 * 1000, // 1 day and 1 hours
-      lifetime: 24 * 60 * 60,
-    }).prevent);
     this.app.use(bodyParser.json(
       {
         limit: '50mb',
