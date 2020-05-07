@@ -15,6 +15,9 @@ const config = {
     ).toString(),
   },
   mongo: {
+    cert: process.env.MONGO_CERT || readFileSync(
+      path.join(__dirname, '..', '..', 'etc', 'cert.pem'),
+    ).toString(),
     uri: process.env.MONGODB_URI || '',
     host: process.env.MONGO_HOST || 'localhost',
     port: process.env.MONGO_PORT || '27017',
