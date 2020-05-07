@@ -8,7 +8,9 @@ export class UserMidleware {
   public static getIpInformation(): RequestHandler {
     return expressHandleAsync(
       async (req: Request, res: Response, next: NextFunction) => {
-        const ip: string = req.headers['x-real-ip'] as string || req.connection.remoteAddress;
+        const ip: string = req.headers['x-real-ip'] as string ||
+          req.headers['x-forwarded-for'] as string ||
+          req.connection.remoteAddress;
 
         console.log(ip);
         if (!ip) {
