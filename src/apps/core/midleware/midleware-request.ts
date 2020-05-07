@@ -10,6 +10,7 @@ export class UserMidleware {
       async (req: Request, res: Response, next: NextFunction) => {
         const ip: string = req.headers['x-real-ip'] as string || req.connection.remoteAddress;
 
+        console.log(ip);
         if (!ip) {
           return next(new errors.UNAUTHORIZED({ message: 'Verification IP Fail' }));
         }
@@ -17,6 +18,7 @@ export class UserMidleware {
         try {
           const information = (await Utils.getIpInformation(ip)).data;
 
+          console.log(information);
           if (information.status === 'fail') {
             return next(new errors.UNAUTHORIZED({ message: 'Verification IP Fail' }));
           }
