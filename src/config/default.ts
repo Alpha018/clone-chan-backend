@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 
 const config = {
   env: process.env.NODE_ENV || 'development',
-  sslPort: 3000,
+  sslPort: process.env.PORT || '3000',
   appName: process.env.APPLICATION_NAME || 'clone-chan',
   httpOptions: {},
   httpsOptions: {
