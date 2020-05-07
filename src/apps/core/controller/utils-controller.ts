@@ -8,16 +8,12 @@ import { Connection } from '../../model/connection';
 import moment from 'moment';
 import { MongoManager } from '../manager/mongo-manager';
 
-const imageThumbnail = require('image-thumbnail');
-const strs = require('stringstream');
-
 export class UtilsController {
   static async getIcon(req: Request, res: Response, next: NextFunction) {
     const logPrefix = buildPrefix(req.method, req.path);
 
     const { key } = req.params;
 
-    console.log(key);
     if (!key) {
       logger.error(`${logPrefix} Some param not found in request`);
       next(new errors.BAD_REQUEST());
@@ -25,7 +21,6 @@ export class UtilsController {
     }
 
     try {
-      console.log(`/icons/${key}`);
       const result = await SpaceManager.getFile(`icons/${key}`);
 
       res.header('Content-Disposition', `inline; filename="${key}"`);
@@ -143,7 +138,7 @@ export class UtilsController {
       const images = await File.find({ type: 'image' })
         .select('_id nameFile key')
         .skip(randomLimit)
-        .limit(5);
+        .limit(3);
 
       res.status(200).send({ images });
     } catch (e) {

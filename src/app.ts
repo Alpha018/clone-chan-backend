@@ -20,10 +20,9 @@ import { UtilsRoutes } from './apps/core/routes/utils-routes';
 import { CommentRoutes } from './apps/core/routes/commet-routes';
 import { BoardRoutes } from './apps/core/routes/board-routes';
 import { checkIpInformation } from './apps/core/midleware/midleware-request';
-import expressBrute from 'express-brute';
-import { Utils } from './utils/utils';
 
 const logParentPrefix = path.basename(__filename, '.ts');
+
 // Create Express server
 class Server {
   public app: express.Application;
@@ -51,14 +50,6 @@ class Server {
       },
     ));
     this.app.use(checkIpInformation);
-    this.app.use(new expressBrute(Utils.getStoreBruteForce(), {
-      freeRetries: 1000000,
-      attachResetToRequest: false,
-      refreshTimeoutOnRequest: false,
-      minWait: 5 * 60 * 1000, // 5 minutes
-      maxWait: 25 * 60 * 60 * 1000, // 1 day and 1 hours
-      lifetime: 24 * 60 * 60,
-    }).prevent);
     this.app.use(bodyParser.json(
       {
         limit: '50mb',
@@ -66,8 +57,8 @@ class Server {
       },
     ));
     this.app.use(expressFileupload({
-      useTempFiles : true,
-      tempFileDir : '/tmp/',
+      useTempFiles: true,
+      tempFileDir: '/tmp/',
       limits: { fileSize: 50 * 1024 * 1024 },
       abortOnLimit: true,
       limitHandler: UtilsController.tooLarge,
@@ -140,9 +131,12 @@ class Server {
     const logPrefix = buildPrefix(logParentPrefix, this.mongooseConfig.name);
     logger.info(`${logPrefix} Init connection to mongoDB`);
     try {
-      // tslint:disable-next-line:max-line-length
-      await mongoose.connect(`mongodb://${config.mongo.user}:${config.mongo.password}@${config.mongo.host}:${config.mongo.port}/${config.mongo.database}`,
-                             { useNewUrlParser: true });
+      const options = {
+        replset: { sslCA: config.mongo.cert },
+      };
+      if (config.mongo.uri) {
+        await mongoose.connect(config.mongo.uri, options);
+      }
       logger.info(`${logPrefix} Connecting to mongoDB Success!`);
       this.configPusher();
     } catch (e) {

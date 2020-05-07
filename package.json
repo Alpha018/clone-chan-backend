@@ -9,7 +9,7 @@
   "author": "felipe@reigndesign.com",
   "license": "MIT",
   "scripts": {
-    "start": "APPLICATION_NAME=template-app node ./index.js",
+    "start": "node ./dist/index.js",
     "start:dev": "set debug=* && export NODE_ENV=development && ts-node-dev --respawn --transpileOnly ./src/index.ts",
     "build": "rm -rf ./dist && tsc",
     "lint": "tslint -c tslint.json -p tsconfig.json",
@@ -47,7 +47,6 @@
     "get-video-dimensions": "^1.0.0",
     "helmet": "^3.18.0",
     "image-size": "^0.8.1",
-    "image-thumbnail": "^1.0.4",
     "lodash": "^4.17.15",
     "lusca": "^1.5.2",
     "mime-types": "^2.1.24",

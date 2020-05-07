@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 
 const config = {
   env: process.env.NODE_ENV || 'development',
-  sslPort: 3000,
+  sslPort: process.env.PORT || '3000',
   appName: process.env.APPLICATION_NAME || 'clone-chan',
   httpOptions: {},
   httpsOptions: {
@@ -15,6 +15,10 @@ const config = {
     ).toString(),
   },
   mongo: {
+    cert: process.env.MONGO_CERT || readFileSync(
+      path.join(__dirname, '..', '..', 'etc', 'cert.pem'),
+    ).toString(),
+    uri: process.env.MONGODB_URI || '',
     host: process.env.MONGO_HOST || 'localhost',
     port: process.env.MONGO_PORT || '27017',
     user: process.env.MONGO_USER || '',
