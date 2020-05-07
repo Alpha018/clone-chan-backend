@@ -42,6 +42,9 @@ class Server {
   }
 
   config() {
+    // Allow Cross-Origin Resource Sharing and basic security
+    this.app.use(cors());
+    this.app.use(helmet());
     // Express configuration
     this.app.use(bodyParser.urlencoded(
       {
@@ -63,10 +66,6 @@ class Server {
       abortOnLimit: true,
       limitHandler: UtilsController.tooLarge,
     }));
-
-    // Allow Cross-Origin Resource Sharing and basic security
-    this.app.use(cors());
-    this.app.use(helmet());
   }
 
   private swaggerSetup() {
