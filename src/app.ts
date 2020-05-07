@@ -65,7 +65,9 @@ class Server {
     }));
 
     // Allow Cross-Origin Resource Sharing and basic security
-    this.app.use(cors());
+    this.app.use(cors({
+      origin: ['https://ucnchan.org', 'https://www.ucnchan.org'],
+    }));
     this.app.use(helmet());
   }
 
