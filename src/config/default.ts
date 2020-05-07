@@ -15,6 +15,7 @@ const config = {
     ).toString(),
   },
   mongo: {
+    uri: process.env.MONGODB_URI || '',
     host: process.env.MONGO_HOST || 'localhost',
     port: process.env.MONGO_PORT || '27017',
     user: process.env.MONGO_USER || '',

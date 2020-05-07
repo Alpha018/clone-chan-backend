@@ -9,7 +9,7 @@
   "author": "felipe@reigndesign.com",
   "license": "MIT",
   "scripts": {
-    "start": "APPLICATION_NAME=template-app node ./index.js",
+    "start": "node ./index.js",
     "start:dev": "set debug=* && export NODE_ENV=development && ts-node-dev --respawn --transpileOnly ./src/index.ts",
     "build": "rm -rf ./dist && tsc",
     "lint": "tslint -c tslint.json -p tsconfig.json",
