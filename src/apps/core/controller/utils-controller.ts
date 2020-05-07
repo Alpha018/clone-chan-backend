@@ -8,9 +8,6 @@ import { Connection } from '../../model/connection';
 import moment from 'moment';
 import { MongoManager } from '../manager/mongo-manager';
 
-const imageThumbnail = require('image-thumbnail');
-const strs = require('stringstream');
-
 export class UtilsController {
   static async getIcon(req: Request, res: Response, next: NextFunction) {
     const logPrefix = buildPrefix(req.method, req.path);
