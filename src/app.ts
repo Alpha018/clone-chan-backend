@@ -131,12 +131,11 @@ class Server {
     const logPrefix = buildPrefix(logParentPrefix, this.mongooseConfig.name);
     logger.info(`${logPrefix} Init connection to mongoDB`);
     try {
+      const options = {
+        replset: { sslCA: config.mongo.cert },
+      };
       if (config.mongo.uri) {
-        await mongoose.connect(config.mongo.uri, { useNewUrlParser: true });
-      } else {
-        // tslint:disable-next-line:max-line-length
-        await mongoose.connect(`mongodb://${config.mongo.user}:${config.mongo.password}@${config.mongo.host}:${config.mongo.port}/${config.mongo.database}`,
-                               { useNewUrlParser: true });
+        await mongoose.connect(config.mongo.uri, options);
       }
       logger.info(`${logPrefix} Connecting to mongoDB Success!`);
       this.configPusher();
