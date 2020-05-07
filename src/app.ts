@@ -132,7 +132,8 @@ class Server {
     logger.info(`${logPrefix} Init connection to mongoDB`);
     try {
       const options = {
-        replset: { sslCA: config.mongo.cert },
+        sslCA: config.mongo.cert,
+        useUnifiedTopology: true,
       };
       if (config.mongo.uri) {
         await mongoose.connect(config.mongo.uri, options);
