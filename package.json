@@ -47,7 +47,7 @@
     "get-video-dimensions": "^1.0.0",
     "helmet": "^3.18.0",
     "image-size": "^0.8.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "lusca": "^1.5.2",
     "mime-types": "^2.1.24",
     "moment": "^2.24.0",
